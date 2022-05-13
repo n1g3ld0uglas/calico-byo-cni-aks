@@ -233,6 +233,19 @@ https://docs.calicocloud.io/get-started/connect/aks <br/>
 
 <img width="1000" alt="Screenshot 2022-05-13 at 17 20 08" src="https://user-images.githubusercontent.com/82048393/168325678-27e884cd-6e53-4e12-984c-c069bb1e6ebc.png">
 
+Check the installation status with the below command:
+```
+kubectl get installer default --namespace calico-cloud -o jsonpath --template '{.status}'
+```
+
+At this point, I recommend using our supported checklist for troubleshooting advice: <br/>
+https://docs.calicocloud.io/get-started/connect/checklist
+
+```
+{"clusterName":"my-new-cluster","state":"installing"}
+```
+After state is ```complete```, Calico Cloud is properly installed. <br/>
+<br/>
 
 The ```Network Profile``` will always show as ```CNI=None``` - even after installing Calico CNI plugin
 ```
