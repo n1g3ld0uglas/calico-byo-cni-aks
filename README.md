@@ -66,6 +66,7 @@ Let’s get started changing this pod to the new IP pool (10.0.0.0/16). <br/>
 We add a new ```IPPool``` resource with the CIDR range, 10.0.0.0/16.
 
 ```
+kubectl create -f - <<EOF
 apiVersion: projectcalico.org/v3
 kind: IPPool
 metadata:
@@ -74,4 +75,11 @@ spec:
   cidr: 10.0.0.0/16
   ipipMode: Always
   natOutgoing: true
+EOF  
 ```  
+
+Let’s verify the new IP pool.
+
+```
+./calicoctl get ippool -o wide
+```
