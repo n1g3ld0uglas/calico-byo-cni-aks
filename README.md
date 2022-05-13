@@ -225,3 +225,20 @@ For more configuration scenarios, users can sign-up for the certified Calico Ope
 ```
 https://academy.tigera.io/course/certified-calico-operator-level-1/
 ```
+
+## Connecting to Calico Cloud
+
+Although not mention in our docs, the install process worked for Calico Cloud <br/>
+https://docs.calicocloud.io/get-started/connect/aks <br/>
+
+<img width="1000" alt="Screenshot 2022-05-13 at 17 20 08" src="https://user-images.githubusercontent.com/82048393/168325678-27e884cd-6e53-4e12-984c-c069bb1e6ebc.png">
+
+
+The ```Network Profile``` will always show as ```CNI=None``` - even after installing Calico CNI plugin
+```
+az aks show --resource-group my-calico-rg --name my-calico-cluster --query 'networkProfile'
+```
+
+<img width="988" alt="Screenshot 2022-05-13 at 17 25 27" src="https://user-images.githubusercontent.com/82048393/168326599-dfc7f1a7-6d83-4cf0-89e4-c4e66bc5761d.png">
+
+
