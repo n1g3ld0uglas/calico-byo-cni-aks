@@ -254,4 +254,15 @@ az aks show --resource-group my-calico-rg --name my-calico-cluster --query 'netw
 
 <img width="988" alt="Screenshot 2022-05-13 at 17 25 27" src="https://user-images.githubusercontent.com/82048393/168326599-dfc7f1a7-6d83-4cf0-89e4-c4e66bc5761d.png">
 
+Check the status of all Calico Cloud components via the below command <br/>
+NB: Wait until all components are set to ```AVAILABLE: true```:
+
+```
+kubectl get tigerastatus -w
+```
+
+<img width="1004" alt="Screenshot 2022-05-13 at 20 10 01" src="https://user-images.githubusercontent.com/82048393/168374099-246e6623-44e7-42ec-8d30-53226dc86136.png">
+
+
+
 
