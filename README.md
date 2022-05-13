@@ -213,3 +213,15 @@ kubectl -n ippool-test get pods -l app=nginx -o wide
 ```
 kubectl delete ns ippool-test
 ```
+
+Now that you’ve verified that pods are getting IPs from the new range, you can safely delete the old pool. <br/>
+We can now proceed to our next configuration test.
+
+```
+./calicoctl delete pool default-ipv4-ippool
+```
+
+For more configuration scenarios, users can sign-up for the certified Calico Operator course:
+```
+https://academy.tigera.io/course/certified-calico-operator-level-1/
+```
