@@ -62,3 +62,16 @@ kube-system        coredns-autoscaler-7d56cd888-t4cvr         aks-nodepool1-3866
 kube-system        metrics-server-64b66fbbc8-6n2zm            aks-nodepool1-38669398-vmss000003   10.244.34.131/32   cali51656fecf55 
 ```
 
+Let’s get started changing this pod to the new IP pool (10.0.0.0/16). <br/>
+We add a new ```IPPool``` resource with the CIDR range, 10.0.0.0/16.
+
+```
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: new-pool
+spec:
+  cidr: 10.0.0.0/16
+  ipipMode: Always
+  natOutgoing: true
+```  
