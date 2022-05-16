@@ -281,6 +281,45 @@ To expand from the default size /26, lower the blockSize (for example, /24). <br
 To shrink the blockSize from the default /26, raise the number (for example, /28).
 
 
+#### Best practice: change IP pool block size before installation
+We now know the ```blockSize``` field cannot be edited directly after Calico installation. <br/>
+It is best to change the IP pool block size before installation to minimize disruptions to pod connectivity.
+
+#### Create a temporary IP pool
+We add a new IPPool with the CIDR range, ```10.0.0.0/16```.
+
+```
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: temporary-pool
+spec:
+  cidr: 10.0.0.0/16
+  ipipMode: Always
+  natOutgoing: true
+```
+
+Apply the changes.
+```
+./calicoctl apply -f temporary-pool.yaml
+```
+
+Let’s verify the temporary IP pool.
+```
+./calicoctl get ippool -o wide
+```
+```
+NAME                  CIDR             NAT    IPIPMODE   DISABLED
+default-ipv4-ippool   192.168.0.0/16   true   Always     false
+temporary-pool        10.0.0.0/16      true   Always     false
+```
+
+#### Disable the existing IP pool
+Disable allocations in the default pool.
+```
+./calicoctl patch ippool default-ipv4-ippool -p '{"spec": {"disabled": true}}'
+```
+
 
 ## Calico Certified Courses
 For more configuration scenarios, users can sign-up for the certified Calico Operator course:
