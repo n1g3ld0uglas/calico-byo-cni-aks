@@ -222,6 +222,7 @@ We can now proceed to our next configuration test.
 ```
 
 ## Change IP pool block size
+https://projectcalico.docs.tigera.io/networking/change-block-size <br/>
 By default, Calico uses an IPAM block size of 64 addresses – /26 for IPv4, and /122 for IPv6. <br/>
 However, the block size can be changed depending on the IP pool address family. <br/>
 <br/>
@@ -319,6 +320,40 @@ Disable allocations in the default pool.
 ```
 ./calicoctl patch ippool default-ipv4-ippool -p '{"spec": {"disabled": true}}'
 ```
+
+Verify the changes.
+```
+./calicoctl get ippool -o wide
+```
+```
+NAME                  CIDR             NAT    IPIPMODE   DISABLED
+default-ipv4-ippool   192.168.0.0/16   true   Always     true
+temporary-pool        10.0.0.0/16      true   Always     false
+```
+
+## Delete pods from the existing IP pool
+In our example, coredns is our test pod scenario <br/> 
+For multiple pods you would trigger a deletion for all pods in the cluster.
+```
+kubectl delete pod -n kube-system coredns-6f4fd4bdf-8q7zp
+```
+
+Restart all pods with just one command. <br/>
+```WARNING!``` The following command is disruptive and may take several minutes depending on the number of pods deployed.
+
+```
+kubectl delete pod -A --all
+```
+
+#### Delete the existing IP pool
+Now that you’ve verified that pods are getting IPs from the new range, you can safely delete the existing pool.
+```
+./calicoctl delete ippool default-ipv4-ippool
+```
+
+
+
+
 
 
 ## Calico Certified Courses
