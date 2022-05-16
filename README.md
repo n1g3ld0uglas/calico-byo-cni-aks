@@ -221,6 +221,68 @@ We can now proceed to our next configuration test.
 ./calicoctl delete pool default-ipv4-ippool
 ```
 
+## Change IP pool block size
+By default, Calico uses an IPAM block size of 64 addresses – /26 for IPv4, and /122 for IPv6. <br/>
+However, the block size can be changed depending on the IP pool address family. <br/>
+<br/>
+IPv4: 20-32, inclusive
+IPv6: 116-128, inclusive
+You can have only one default IP pool for per protocol in your installation manifest. <br/>
+In this example, there is one IP pool for IPv4 (/26), and one IP pool for IPv6 (/122) <br/>
+
+```
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+  pec:
+   # Configures Calico networking.
+   calicoNetwork:
+     # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: 26
+      cidr: 10.48.0.0/21
+      encapsulation: IPIP
+      natOutgoing: Enabled
+      nodeSelector: all()
+    - blockSize: 122
+      cidr: 2001::00/64 
+      encapsulation: None 
+      natOutgoing: Enabled 
+      nodeSelector: all()
+```
+
+However, the following is invalid because it has two IP pools for IPv4.
+```
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+  spec:
+   # Configures Calico networking.
+   calicoNetwork:
+     # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: 26
+      cidr: 10.48.0.0/21
+      encapsulation: IPIP
+      natOutgoing: Enabled
+      nodeSelector: all()
+    - blockSize: 31
+      cidr: 10.48.8.0/21
+      encapsulation: IPIP
+      natOutgoing: Enabled
+      nodeSelector: all()
+```
+
+#### Expand or shrink IP pool block sizes
+By default, the Calico IPAM block size for an IP pool is /26. <br/>
+To expand from the default size /26, lower the blockSize (for example, /24). <br/>
+To shrink the blockSize from the default /26, raise the number (for example, /28).
+
+
+
+## Calico Certified Courses
 For more configuration scenarios, users can sign-up for the certified Calico Operator course:
 ```
 https://academy.tigera.io/course/certified-calico-operator-level-1/
