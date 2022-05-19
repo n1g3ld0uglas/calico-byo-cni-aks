@@ -359,8 +359,56 @@ Now that you’ve verified that pods are getting IPs from the new range, you can
 ./calicoctl delete ippool default-ipv4-ippool
 ```
 
+#### Create a new IP pool with the desired block size
 
+In this step, we update the IPPool with the new block size of ```(/28)```.
+Once the changes are configured, apply the file ``` kubectl apply -f```.
 
+```
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: default-ipv4-ippool
+spec:
+  blockSize: 28
+  cidr: 192.0.0.0/16
+  ipipMode: Always
+  natOutgoing: true
+```
+
+```
+./calicoctl apply -f pool.yaml
+```
+
+#### Disable the temporary IP pool
+```
+./calicoctl patch ippool temporary-pool -p '{"spec": {"disabled": true}}'
+```
+
+####  Delete pods from the temporary IP pool
+In our example, coredns is our only pod <br/> 
+For multiple pods you would trigger a deletion for all pods in the cluster.
+```
+kubectl delete pod -n kube-system coredns-6f4fd4bdf-8q7zp
+```
+
+```WARNING!``` The following command is disruptive and may take several minutes depending on the number of pods deployed.
+```
+kubectl delete pod -A --all
+```
+
+Validate your pods and block size are correct by running the following commands:
+```
+kubectl get pods --all-namespaces -o wide
+./calicoctl ipam show --show-blocks
+```
+
+####   Delete the temporary IP pool
+Clean up the IP pools by deleting the temporary IP pool. <br/>
+Your cluster should now be in the original state you left it in.
+```
+./calicoctl delete pool temporary-pool
+```
 
 
 <br/>
