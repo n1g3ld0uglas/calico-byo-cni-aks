@@ -25,7 +25,11 @@ Set the file to be executable
 chmod +x ./calicoctl
 ```
 
-## Migrate from one IP pool to another
+<br/>
+<br/>
+<br/>
+
+## Scenario 1: Migrate from one IP pool to another
 
 Pods are assigned IP addresses from IP pools that you configure in Calico. <br/>
 As the number of pods increase, you may need to increase the number of addresses available for pods to use. <br/>
@@ -79,7 +83,7 @@ EOF
 ```  
 
 Let’s verify the new IP pool was created correctly. <br/>
-It should reference the new CIDR range, 10.0.0.0/16.
+It should reference the new CIDR range, ```10.0.0.0/16```.
 
 ```
 ./calicoctl get ippool -o wide
@@ -221,7 +225,11 @@ We can now proceed to our next configuration test.
 ./calicoctl delete pool default-ipv4-ippool
 ```
 
-## Change IP pool block size
+<br/>
+<br/>
+<br/>
+
+## Scenario 2: Change IP pool block size
 https://projectcalico.docs.tigera.io/networking/change-block-size <br/>
 By default, Calico uses an IPAM block size of 64 addresses – /26 for IPv4, and /122 for IPv6. <br/>
 However, the block size can be changed depending on the IP pool address family. <br/>
@@ -243,7 +251,7 @@ metadata:
     ipPools:
     - blockSize: 26
       cidr: 10.48.0.0/21
-      encapsulation: IPIP
+      encapsulation: VXLAN
       natOutgoing: Enabled
       nodeSelector: all()
     - blockSize: 122
@@ -253,7 +261,7 @@ metadata:
       nodeSelector: all()
 ```
 
-However, the following is invalid because it has two IP pools for IPv4.
+However, the following is ```INVALID``` because it has two IP pools for IPv4.
 ```
 apiVersion: operator.tigera.io/v1
 kind: Installation
@@ -266,12 +274,12 @@ metadata:
     ipPools:
     - blockSize: 26
       cidr: 10.48.0.0/21
-      encapsulation: IPIP
+      encapsulation: VXLAN
       natOutgoing: Enabled
       nodeSelector: all()
     - blockSize: 31
       cidr: 10.48.8.0/21
-      encapsulation: IPIP
+      encapsulation: VXLAN
       natOutgoing: Enabled
       nodeSelector: all()
 ```
@@ -355,12 +363,20 @@ Now that you’ve verified that pods are getting IPs from the new range, you can
 
 
 
+<br/>
+<br/>
+<br/>
+
 
 ## Calico Certified Courses
-For more configuration scenarios, users can sign-up for the certified Calico Operator course:
+For more configuration scenarios, users can sign-up for the certified Calico Operator (for Azure) course:
 ```
-https://academy.tigera.io/course/certified-calico-operator-level-1/
+[https://academy.tigera.io/course/certified-calico-operator-level-1/](https://www.tigera.io/lp/calico-academy-completion-azure/)
 ```
+
+<br/>
+<br/>
+<br/>
 
 ## Connecting to Calico Cloud
 
